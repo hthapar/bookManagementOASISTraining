@@ -1,4 +1,5 @@
 package com.test.springernature
+
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.http4k.core.HttpHandler
@@ -13,28 +14,14 @@ class BookDetailsTest {
     @Test
     fun `Should fetch book name using book id`() {
 
-        val expected = "bookName"
-
-        val actual = serverCall()
-
-        assertThat(actual, equalTo(expected))
-    }
-
-    private fun serverCall(): String {
-
         val request = Request(GET, "/").query("id", "bookId")
 
-        val response = server(request)
+        val server: HttpHandler = { _: Request -> Response(Status.OK).body("bookName") }
 
-        return response.bodyString()
-    }
+        val expected = "bookName"
 
-    private fun server(request: Request): Response {
+        val actual =  server(request).bodyString()
 
-        val server: HttpHandler = {
-            Response(Status.OK)
-            .body("bookName") }
-
-        return server(request)
+        assertThat(actual, equalTo(expected))
     }
 }
