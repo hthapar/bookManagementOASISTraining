@@ -8,6 +8,8 @@ import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status
 import org.junit.jupiter.api.Test
+import server
+
 
 class BookDetailsTest {
 
@@ -15,8 +17,6 @@ class BookDetailsTest {
     fun `Should fetch book name using book id`() {
 
         val request = Request(GET, "/").query("id", "bookId")
-
-        val server: HttpHandler = { _: Request -> Response(Status.OK).body("bookName") }
 
         val expected = "bookName"
 
