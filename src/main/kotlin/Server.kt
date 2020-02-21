@@ -1,7 +1,8 @@
-import org.http4k.core.HttpHandler
-import org.http4k.core.Request
-import org.http4k.core.Response
-import org.http4k.core.Status
+import org.http4k.core.*
 
+val server: HttpHandler = { req: Request -> Response(Status.OK)
+                            .body("${getBookNameUsingBookId(req.query("id")?.toInt())}") }
 
-val server: HttpHandler = { _: Request -> Response(Status.OK).body("bookName") }
+private fun getBookNameUsingBookId(bookId: Int?): String? {
+    return books[bookId]
+}

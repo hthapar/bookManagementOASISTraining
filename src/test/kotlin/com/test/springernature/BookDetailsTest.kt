@@ -1,12 +1,10 @@
 package com.test.springernature
 
+import books
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import org.http4k.core.HttpHandler
-import org.http4k.core.Method.GET
+import org.http4k.core.Method
 import org.http4k.core.Request
-import org.http4k.core.Response
-import org.http4k.core.Status
 import org.junit.jupiter.api.Test
 import server
 
@@ -15,13 +13,19 @@ class BookDetailsTest {
 
     @Test
     fun `Should fetch book name using book id`() {
+        val request = Request(Method.GET, "/").query("id", "1")
 
-        val request = Request(GET, "/").query("id", "bookId")
-
-        val expected = "bookName"
+        val expected = "Immortals of Meluha"
 
         val actual =  server(request).bodyString()
 
         assertThat(actual, equalTo(expected))
+
     }
+
+    private fun getBookNameUsingBookId(bookId: Int?): String? {
+        return books[bookId]
+    }
+
+
 }
