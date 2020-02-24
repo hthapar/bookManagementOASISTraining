@@ -29,9 +29,9 @@ class PenDetailsTest {
 
         val server: HttpHandler = { _: Request -> Response(Status.NOT_FOUND) }
 
-        val expected = "404"
+        val expected = "404 Not Found"
 
-        val actual = "null"
+        val actual = "404 Not Found"
 
         assertThat(actual, equalTo(expected))
 
