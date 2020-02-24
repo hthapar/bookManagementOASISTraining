@@ -9,7 +9,9 @@ val server: HttpHandler = { req: Request -> Response(Status.OK)
 private fun getBookNameUsingBookId(bookId: Int?)= books[bookId]
 
 
-val serverPen: HttpHandler = { req: Request -> Response(Status.OK)
-                            .body("${getPenDetails(req.query("penId")?.toInt())}") }
+val serverPen: HttpHandler = { req: Request ->
+                                Response(Status.OK)
+                                    .body("${getPenDetails(req.query("penId")?.toInt())}")
+}
 
 private fun getPenDetails(penId: Int?) = pens[penId]
