@@ -1,8 +1,8 @@
 package db
 
-val pens = listOf(
+val pens = mapOf(
     1 to "Lexi Pen",
     2 to "Parker Pen",
-    3 to "Perrie cardin Pen",
+    3 to "Pierre Cardin Pen",
     4 to "Cello Pen"
 )

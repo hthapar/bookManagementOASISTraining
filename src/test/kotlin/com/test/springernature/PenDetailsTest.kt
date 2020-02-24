@@ -2,7 +2,6 @@ package com.test.springernature
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import db.pens
 import org.http4k.core.*
 
 import org.junit.jupiter.api.Test
@@ -23,5 +22,18 @@ class PenDetailsTest {
 
     }
 
+    @Test
+    fun `Should give a Not Found Error`(){
 
+        val request = Request(Method.GET, "/").query("penId", "100")
+
+        val server: HttpHandler = { _: Request -> Response(Status.NOT_FOUND) }
+
+        val expected = "404"
+
+        val actual = "null"
+
+        assertThat(actual, equalTo(expected))
+
+    }
 }
