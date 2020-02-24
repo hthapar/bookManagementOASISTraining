@@ -1,6 +1,6 @@
 package com.test.springernature
 
-import books
+import db.books
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.http4k.core.Method
@@ -22,10 +22,4 @@ class BookDetailsTest {
         assertThat(actual, equalTo(expected))
 
     }
-
-    private fun getBookNameUsingBookId(bookId: Int?): String? {
-        return books[bookId]
-    }
-
-
 }
