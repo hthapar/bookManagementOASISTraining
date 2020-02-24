@@ -31,7 +31,7 @@ class PenDetailsTest {
 
         val expected = "404 Not Found"
 
-        val actual = "404 Not Found"
+        val actual = server(request).status.toString()
 
         assertThat(actual, equalTo(expected))
 
