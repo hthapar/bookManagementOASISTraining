@@ -4,6 +4,7 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import db.pens
 import org.http4k.core.*
+import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.NOT_FOUND
 import org.http4k.core.Status.Companion.OK
 
@@ -48,14 +49,48 @@ class PenDetailsTest {
     private fun getPenDetails(id: String?): String? = pens[id?.toInt()]
 
 
-    // Bad Request
-
     @Test
-    fun `Should not return pen name, when ID is in text format`(){
-        val expected = "Pen Name"
+    fun `Should give Bad request, if Id is invalid`() {
 
-        val actual = "some unexpected text in place of ID"
+        val expected = "ERROR : Please Enter a valid ID!"
 
-        assertThat("if text in ID, should give a Bad Request message", actual, equalTo(expected))
+        val request = Request(Method.GET, "/").query("penId", "abc")
+
+        val server =
+            { req: Request ->
+                req.extractId("penId")?.let { id ->
+                    getPenDetails2(id)?.let { Response(OK).body(it) } ?: Response(NOT_FOUND)
+                } ?: Response(BAD_REQUEST).body("ERROR : Please Enter a valid ID!")
+
+            }
+
+
+        val actual = server(request)
+
+
+        assertThat("Status should be 400 Bad Request", actual.status, equalTo(BAD_REQUEST))
+        assertThat("if text in ID, should give a Bad Request message", actual.bodyString(), equalTo(expected))
     }
+
+    private fun Request.extractId(name: String) = query(name)?.toIntOrNull()
+
+    private fun getPenDetails2(id: Int): String? = pens[id]
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
