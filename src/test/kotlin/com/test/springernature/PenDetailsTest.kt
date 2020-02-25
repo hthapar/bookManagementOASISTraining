@@ -4,6 +4,8 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import db.pens
 import org.http4k.core.*
+import org.http4k.core.Status.Companion.NOT_FOUND
+import org.http4k.core.Status.Companion.OK
 
 import org.junit.jupiter.api.Test
 import serverPen
@@ -11,48 +13,40 @@ import serverPen
 class PenDetailsTest {
 
     @Test
-    fun `Should fetch pen name using Id`(){
+    fun `Should fetch pen name using Id`() {
 
         val request = Request(Method.GET, "/").query("penId", "4")
 
-        val expected = "Cello Pen"
+        val expectedResponse = "Cello Pen"
 
-        val actual = serverPen(request).bodyString() //response
+        val actualResponse = serverPen(request)
 
-        assertThat(actual, equalTo(expected))
+        assertThat("status should be 200 OK success", actualResponse.status, equalTo(OK))
+        assertThat("if found, should return name", actualResponse.bodyString(), equalTo(expectedResponse))
 
     }
-
-
-
-
 
     @Test
-    fun `Should give a Not Found status in Response`(){
+    fun `Should not fetch pen name when not found`() {
 
-        val request = Request(Method.GET, "/").query("penId", "10")
+        val expected = ""
+        val request = Request(Method.GET, "/").query("penId", "abc")
 
-        val serverNotFound = { req: Request ->
-                                                if (req.query("penId")?.toInt() ?: 0 <= pens.keys.max()!!){
-                                                    Response(Status.OK)
-                                                    .body("${getPenDetails(req.query("penId")?.toInt())}")
-                                                }
-                                                else {
-                                                    Response(Status.NOT_FOUND)
+        val serverNew =
+            { req: Request -> getPenDetails(req.query("penId"))?.let { Response(OK).body(it) } ?: Response(NOT_FOUND) }
 
-                                                }
-                                            }
 
-        val expected = "404 Not Found"
+        val actual = serverNew(request)
 
-        val actual = serverNotFound(request).status.toString()
 
-        println(actual)
-
-        assertThat(actual, equalTo(expected))
+        assertThat("Status should be 404 Not Found", actual.status, equalTo(NOT_FOUND))
+        assertThat("if not found, should not return name", actual.bodyString(), equalTo(expected))
 
     }
 
-    private fun getPenDetails(penId: Int?) = pens[penId] //returns name of the Pen
+    private fun getPenDetails(id: String?): String? = pens[id?.toInt()]
+
+
+    // Bad Request
 
 }
