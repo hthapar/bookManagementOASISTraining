@@ -16,11 +16,11 @@ class PenDetailsTest {
     @Test
     fun `Should fetch pen name using Id`() {
 
-        val request = Request(Method.GET, "/").query("penId", "4")
+        val request = Request(Method.GET, "/getPen").query("penId", "4")
 
         val expectedResponse = "Cello Pen"
 
-        val actualResponse = server(request)
+        val actualResponse = server (request)
 
         assertThat("status should be 200 OK success", actualResponse.status, equalTo(OK))
         assertThat("if found, should return name", actualResponse.bodyString(), equalTo(expectedResponse))
@@ -32,10 +32,10 @@ class PenDetailsTest {
 
         val expected = ""
 
-        val request = Request(Method.GET, "/").query("penId", "10")
+        val request = Request(Method.GET, "/getPen").query("penId", "10")
 
 
-        val actual = server(request)
+        val actual = server (request)
 
 
         assertThat("Status should be 404 Not Found", actual.status, equalTo(NOT_FOUND))
@@ -51,10 +51,10 @@ class PenDetailsTest {
 
         val expected = "ERROR : Please Enter a valid ID!"
 
-        val request = Request(Method.GET, "/").query("penId", "abc")
+        val request = Request(Method.GET, "/getPen").query("penId", "abc")
 
 
-        val actual = server(request)
+        val actual = server (request)
 
 
         assertThat("Status should be 400 Bad Request", actual.status, equalTo(BAD_REQUEST))

@@ -13,13 +13,13 @@ class BookDetailsTest {
 
     @Test
     fun `Should fetch book name using book id`() {
-        val request = Request(Method.GET, "/").query("bookId", "1")
+        val request = Request(Method.GET, "/getBook").query("bookId", "1")
 
         val expected = "Immortals of Meluha"
 
-        val actual =  server(request).bodyString()
+        val actual =  server(request)
 
-        assertThat(actual, equalTo(expected))
+        assertThat(actual.bodyString(), equalTo(expected))
 
     }
 }
