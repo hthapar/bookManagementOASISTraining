@@ -30,7 +30,8 @@ class PenDetailsTest {
     fun `Should not fetch pen name when not found`() {
 
         val expected = ""
-        val request = Request(Method.GET, "/").query("penId", "abc")
+
+        val request = Request(Method.GET, "/").query("penId", "10")
 
         val serverNew =
             { req: Request -> getPenDetails(req.query("penId"))?.let { Response(OK).body(it) } ?: Response(NOT_FOUND) }
@@ -49,4 +50,12 @@ class PenDetailsTest {
 
     // Bad Request
 
+    @Test
+    fun `Should not return pen name, when ID is in text format`(){
+        val expected = "Pen Name"
+
+        val actual = "some unexpected text in place of ID"
+
+        assertThat("if text in ID, should give a Bad Request message", actual, equalTo(expected))
+    }
 }
