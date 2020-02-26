@@ -16,7 +16,7 @@ class PenDetailsTest {
     @Test
     fun `Should fetch pen name using Id`() {
 
-        val request = Request(Method.GET, "/getPen").query("penId", "4")
+        val request = Request(Method.GET, "/Pen").query("penId", "4")
 
         val expectedResponse = "Cello Pen"
 
@@ -32,7 +32,7 @@ class PenDetailsTest {
 
         val expected = ""
 
-        val request = Request(Method.GET, "/getPen").query("penId", "10")
+        val request = Request(Method.GET, "/Pen").query("penId", "100")
 
 
         val actual = server (request)
@@ -43,15 +43,12 @@ class PenDetailsTest {
 
     }
 
-    private fun getPenDetails(id: String?): String? = pens[id?.toInt()]
-
-
     @Test
     fun `Should give Bad request, if Id is invalid`() {
 
         val expected = "ERROR : Please Enter a valid ID!"
 
-        val request = Request(Method.GET, "/getPen").query("penId", "abc")
+        val request = Request(Method.GET, "/Pen").query("penId", "abc")
 
 
         val actual = server (request)

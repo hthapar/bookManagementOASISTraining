@@ -1,6 +1,5 @@
 package com.test.springernature
 
-import db.books
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.http4k.core.Method
@@ -13,7 +12,7 @@ class BookDetailsTest {
 
     @Test
     fun `Should fetch book name using book id`() {
-        val request = Request(Method.GET, "/getBook").query("bookId", "1")
+        val request = Request(Method.GET, "/Book").query("bookId", "1")
 
         val expected = "Immortals of Meluha"
 
