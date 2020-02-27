@@ -64,13 +64,13 @@ class PenDetailsTest {
         val expected = pensTestData.values.map { it.name }.toString()
 
 
-        val request = Request(Method.GET, "/db.getPens")
+        val request = Request(Method.GET, "/pens")
 
 
         val actual = server(request)
 
 
-        assertThat("Should give List of db.getPens", actual.bodyString(), equalTo(expected))
+        assertThat("Should give List of pens", actual.bodyString(), equalTo(expected))
 
     }
 
