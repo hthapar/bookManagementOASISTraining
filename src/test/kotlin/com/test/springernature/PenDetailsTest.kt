@@ -2,6 +2,7 @@ package com.test.springernature
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
+import db.pens
 import org.http4k.core.*
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.NOT_FOUND
@@ -76,16 +77,32 @@ class PenDetailsTest {
     @Test
     fun `Should filter pen name by ink color`() {
 
-        val expected = "Dummy list of Pen Names By Color"
+        val expected = pensTestData
+            .values
+            .map { it }
+            .filter { it.color == "black" }
+            .map { it.name }.toString()
 
 
-        val request = Request(Method.GET, "/pen").query("inkColor", "COLOR")
+        val request = Request(Method.GET, "/pen").query("inkColor", "black")
 
+        val app = { req: Request ->
+            Response(OK).body(getPenNameByColor(req.query("inkColor")))
+        }
 
-        val actual = null
+        val actual = app(request)
 
-        assertThat(actual, equalTo(expected))
+        assertThat(actual.bodyString(), equalTo(expected))
     }
+
+    private fun getPenNameByColor(color: String?): String {
+        return pens
+            .values
+            .map { it }
+            .filter { it.color == color }
+            .map { it.name }.toString()
+    }
+
 
 }
 
