@@ -9,6 +9,7 @@ import org.http4k.core.Status.Companion.OK
 
 import org.junit.jupiter.api.Test
 import server
+import kotlin.math.exp
 
 class PenDetailsTest {
 
@@ -82,7 +83,7 @@ class PenDetailsTest {
             .filter { it.color == "black" }
             .map { it.name }.toString()
 
-        val request = Request(Method.GET, "/pen/filter").query("inkColor", "black")
+        val request = Request(Method.GET, "/pen/filter-by-color").query("inkColor", "black")
 
         val actual = server(request)
 
@@ -90,15 +91,21 @@ class PenDetailsTest {
     }
 
     @Test
-    fun `Should filter pen names by brand`(){
-        val expected = "pen names by brand"
+    fun `Should filter pen name by brand`(){
+        val expected = pensTestData
+            .values
+            .map { it }
+            .filter { it.brand == "Camlin" }
+            .map { it.name }.toString()
 
-        val request = Request(Method.GET, "/pen/filter").query("brand", "Camlin")
+        val request = Request(Method.GET, "/pen/filter-by-brand").query("brand", "Camlin")
 
-        val actual = null
+        val actual = server(request)
 
-        assertThat(actual, equalTo(expected))
+        assertThat(actual.bodyString(), equalTo(expected))
     }
+
+
 }
 
 

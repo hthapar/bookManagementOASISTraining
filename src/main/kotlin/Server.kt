@@ -19,8 +19,11 @@ val server = routes(
                 getPenDetails(id)?.let { Response(OK).body(it) } ?: Response(Status.NOT_FOUND)
             } ?: Response(Status.BAD_REQUEST).body("ERROR : Please Enter a valid ID!")
         },
-        "/filter/" bind GET to { req: Request ->
+        "/filter-by-color/" bind GET to { req: Request ->
             Response(OK).body(getPenNameByColor(req.query("inkColor")))
+        },
+        "filter-by-brand" bind GET to { req: Request ->
+            Response(OK).body(getPenNameByBrand(req.query("brand")))
         }
     ),
 
@@ -41,3 +44,5 @@ private fun getAllPenNames(): List<String> = pens.values.map { it.name }
 private fun getPenNameByColor(color: String?): String =
     pens.values.map { it }.filter { it.color == color }.map { it.name }.toString()
 
+private fun getPenNameByBrand(brandName: String?): String =
+    pens.values.map { it }.filter { it.brand == brandName }.map { it.name }.toString()
