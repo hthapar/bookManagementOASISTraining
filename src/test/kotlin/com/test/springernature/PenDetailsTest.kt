@@ -58,6 +58,17 @@ class PenDetailsTest {
         assertThat("if text in ID, should give a Bad Request message", actual.bodyString(), equalTo(expected))
     }
 
+    @Test
+    fun `Should fetch name of all available pens`(){
+
+        val expected = "List Of pens"
+
+        val actual = null
+
+        assertThat(actual, equalTo(expected))
+
+    }
+
 }
 
 
