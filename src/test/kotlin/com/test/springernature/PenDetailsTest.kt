@@ -63,13 +63,13 @@ class PenDetailsTest {
 
         val expected = pens.values.map { it.name }
 
-        println(expected)
-
-        val actual = null
+        val actual = getAllPenNames()
 
         assertThat(actual, equalTo(expected))
 
     }
+
+    private fun getAllPenNames(): List<String> = pens.values.map { it.name }
 
 }
 
