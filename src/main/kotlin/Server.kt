@@ -19,7 +19,7 @@ val server = routes(
         } ?: Response(Status.BAD_REQUEST).body("ERROR : Please Enter a valid ID!")
 
     },
-    "db.getPens" bind GET to { _: Request -> Response(OK)
+    "pens" bind GET to { _: Request -> Response(OK)
         .body( getAllPenNames().toString() )
 
     }

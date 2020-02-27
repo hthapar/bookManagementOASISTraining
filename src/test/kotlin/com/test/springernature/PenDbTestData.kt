@@ -39,6 +39,4 @@ val pensTestData:Map<Int,Writer> = mapOf (
     22 to PermanentMarker("Faber Permanent Marker","Faber","blue"),
     23 to PermanentMarker("Doms Permanent Marker","Doms","green"),
     24 to PermanentMarker("Camlin Permanent Marker","Camlin","red")
-
-
 )
