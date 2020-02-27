@@ -88,6 +88,17 @@ class PenDetailsTest {
 
         assertThat(actual.bodyString(), equalTo(expected))
     }
+
+    @Test
+    fun `Should filter pen names by brand`(){
+        val expected = "pen names by brand"
+
+        val request = Request(Method.GET, "/pen/filter").query("brand", "Camlin")
+
+        val actual = null
+
+        assertThat(actual, equalTo(expected))
+    }
 }
 
 
