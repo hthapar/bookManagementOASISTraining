@@ -16,7 +16,7 @@ class PenDetailsTest {
     @Test
     fun `Should fetch pen name using Id`() {
 
-        val request = Request(Method.GET, "/Pen").query("penId", "4")
+        val request = Request(Method.GET, "/pen").query("penId", "4")
 
         val expectedResponse = "Cello Pen"
 
@@ -32,7 +32,7 @@ class PenDetailsTest {
 
         val expected = ""
 
-        val request = Request(Method.GET, "/Pen").query("penId", "100")
+        val request = Request(Method.GET, "/pen").query("penId", "100")
 
 
         val actual = server (request)
@@ -48,7 +48,7 @@ class PenDetailsTest {
 
         val expected = "ERROR : Please Enter a valid ID!"
 
-        val request = Request(Method.GET, "/Pen").query("penId", "abc")
+        val request = Request(Method.GET, "/pen").query("penId", "abc")
 
 
         val actual = server (request)
@@ -61,11 +61,20 @@ class PenDetailsTest {
     @Test
     fun `Should fetch name of all available pens`(){
 
-        val expected = pens.values.map { it.name }
+        val expected = pens.values.map { it.name }.toString()
 
-        val actual = getAllPenNames()
 
-        assertThat(actual, equalTo(expected))
+        val request = Request(Method.GET, "/all-pens")
+
+
+        val app: HttpHandler = { _: Request -> Response(OK)
+                                    .body( getAllPenNames().toString() ) }
+
+
+        val actual = app(request)
+
+
+        assertThat("Should give List of pens", actual.bodyString(), equalTo(expected))
 
     }
 

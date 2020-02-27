@@ -12,7 +12,7 @@ class BookDetailsTest {
 
     @Test
     fun `Should fetch book name using book id`() {
-        val request = Request(Method.GET, "/Book").query("bookId", "1")
+        val request = Request(Method.GET, "/book").query("bookId", "1")
 
         val expected = "Immortals of Meluha"
 

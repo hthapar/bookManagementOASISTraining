@@ -8,11 +8,11 @@ import org.http4k.routing.routes
 
 
 val server = routes(
-    "Book" bind GET to { req: Request ->
+    "book" bind GET to { req: Request ->
         Response(OK)
             .body("${getBookNameUsingBookId(req.query("bookId")?.toInt())}")
     },
-    "Pen" bind GET to { req: Request ->
+    "pen" bind GET to { req: Request ->
         req.extractId("penId")?.let { id ->
             getPenDetails(id)?.let { Response(OK).body(it) } ?: Response(Status.NOT_FOUND)
         } ?: Response(Status.BAD_REQUEST).body("ERROR : Please Enter a valid ID!")
