@@ -1,4 +1,4 @@
-package db
+package com.test.springernature
 
 import Marker
 import Pen
@@ -8,7 +8,7 @@ import SketchPen
 import WhiteBoardMarker
 import Writer
 
-val pens:Map<Int,Writer> = mapOf (
+val pensTestData:Map<Int,Writer> = mapOf (
 
     1 to Pen("Lexi Pen", "Lexi","blue"),
     2 to Pen("Luxor Pen","Luxor","black"),
@@ -39,5 +39,6 @@ val pens:Map<Int,Writer> = mapOf (
     22 to PermanentMarker("Faber Permanent Marker","Faber","blue"),
     23 to PermanentMarker("Doms Permanent Marker","Doms","green"),
     24 to PermanentMarker("Camlin Permanent Marker","Camlin","red")
+
 
 )

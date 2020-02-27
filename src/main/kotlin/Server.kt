@@ -1,5 +1,6 @@
 import db.books
 import db.pens
+
 import org.http4k.core.*
 import org.http4k.core.Method.*
 import org.http4k.core.Status.Companion.OK
@@ -18,8 +19,10 @@ val server = routes(
         } ?: Response(Status.BAD_REQUEST).body("ERROR : Please Enter a valid ID!")
 
     },
-    "all-pens" bind GET to { _: Request -> Response(OK)
-        .body( getAllPenNames().toString() ) }
+    "db.getPens" bind GET to { _: Request -> Response(OK)
+        .body( getAllPenNames().toString() )
+
+    }
 )
 
 private fun getBookNameUsingBookId(bookId: Int?) = books[bookId]

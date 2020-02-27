@@ -2,7 +2,6 @@ package com.test.springernature
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import db.pens
 import org.http4k.core.*
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.NOT_FOUND
@@ -20,7 +19,7 @@ class PenDetailsTest {
 
         val expectedResponse = "Cello Pen"
 
-        val actualResponse = server (request)
+        val actualResponse = server(request)
 
         assertThat("status should be 200 OK success", actualResponse.status, equalTo(OK))
         assertThat("if found, should return name", actualResponse.bodyString(), equalTo(expectedResponse))
@@ -35,7 +34,7 @@ class PenDetailsTest {
         val request = Request(Method.GET, "/pen").query("penId", "100")
 
 
-        val actual = server (request)
+        val actual = server(request)
 
 
         assertThat("Status should be 404 Not Found", actual.status, equalTo(NOT_FOUND))
@@ -51,7 +50,7 @@ class PenDetailsTest {
         val request = Request(Method.GET, "/pen").query("penId", "abc")
 
 
-        val actual = server (request)
+        val actual = server(request)
 
 
         assertThat("Status should be 400 Bad Request", actual.status, equalTo(BAD_REQUEST))
@@ -59,21 +58,34 @@ class PenDetailsTest {
     }
 
     @Test
-    fun `Should fetch name of all available pens`(){
+    fun `Should fetch name of all available pens`() {
 
-        val expected = pens.values.map { it.name }.toString()
+        val expected = pensTestData.values.map { it.name }.toString()
 
 
-        val request = Request(Method.GET, "/all-pens")
+        val request = Request(Method.GET, "/db.getPens")
 
 
         val actual = server(request)
 
 
-        assertThat("Should give List of pens", actual.bodyString(), equalTo(expected))
+        assertThat("Should give List of db.getPens", actual.bodyString(), equalTo(expected))
 
     }
 
+    @Test
+    fun `Should filter pen name by ink color`() {
+
+        val expected = "Dummy list of Pen Names By Color"
+
+
+        val request = Request(Method.GET, "/pen").query("inkColor", "COLOR")
+
+
+        val actual = null
+
+        assertThat(actual, equalTo(expected))
+    }
 
 }
 
