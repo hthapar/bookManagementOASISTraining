@@ -67,18 +67,13 @@ class PenDetailsTest {
         val request = Request(Method.GET, "/all-pens")
 
 
-        val app: HttpHandler = { _: Request -> Response(OK)
-                                    .body( getAllPenNames().toString() ) }
-
-
-        val actual = app(request)
+        val actual = server(request)
 
 
         assertThat("Should give List of pens", actual.bodyString(), equalTo(expected))
 
     }
 
-    private fun getAllPenNames(): List<String> = pens.values.map { it.name }
 
 }
 

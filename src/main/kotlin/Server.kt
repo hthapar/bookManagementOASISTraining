@@ -17,7 +17,9 @@ val server = routes(
             getPenDetails(id)?.let { Response(OK).body(it) } ?: Response(Status.NOT_FOUND)
         } ?: Response(Status.BAD_REQUEST).body("ERROR : Please Enter a valid ID!")
 
-    }
+    },
+    "all-pens" bind GET to { _: Request -> Response(OK)
+        .body( getAllPenNames().toString() ) }
 )
 
 private fun getBookNameUsingBookId(bookId: Int?) = books[bookId]
@@ -25,4 +27,7 @@ private fun getBookNameUsingBookId(bookId: Int?) = books[bookId]
 private fun getPenDetails(penId: Int) = pens[penId]?.name
 
 private fun Request.extractId(name: String) = query(name)?.toIntOrNull()
+
+private fun getAllPenNames(): List<String> = pens.values.map { it.name }
+
 
