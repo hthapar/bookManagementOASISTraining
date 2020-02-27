@@ -2,7 +2,6 @@ package com.test.springernature
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import db.pens
 import org.http4k.core.*
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.NOT_FOUND
@@ -16,7 +15,7 @@ class PenDetailsTest {
     @Test
     fun `Should fetch pen name using Id`() {
 
-        val request = Request(Method.GET, "/pen").query("penId", "4")
+        val request = Request(Method.GET, "/pen/detail").query("penId", "4")
 
         val expectedResponse = "Cello Pen"
 
@@ -32,7 +31,7 @@ class PenDetailsTest {
 
         val expected = ""
 
-        val request = Request(Method.GET, "/pen").query("penId", "100")
+        val request = Request(Method.GET, "/pen/detail").query("penId", "100")
 
 
         val actual = server(request)
@@ -48,7 +47,7 @@ class PenDetailsTest {
 
         val expected = "ERROR : Please Enter a valid ID!"
 
-        val request = Request(Method.GET, "/pen").query("penId", "abc")
+        val request = Request(Method.GET, "/pen/detail").query("penId", "abc")
 
 
         val actual = server(request)
@@ -83,27 +82,12 @@ class PenDetailsTest {
             .filter { it.color == "black" }
             .map { it.name }.toString()
 
+        val request = Request(Method.GET, "/pen/filter").query("inkColor", "black")
 
-        val request = Request(Method.GET, "/pen").query("inkColor", "black")
-
-        val app = { req: Request ->
-            Response(OK).body(getPenNameByColor(req.query("inkColor")))
-        }
-
-        val actual = app(request)
+        val actual = server(request)
 
         assertThat(actual.bodyString(), equalTo(expected))
     }
-
-    private fun getPenNameByColor(color: String?): String {
-        return pens
-            .values
-            .map { it }
-            .filter { it.color == color }
-            .map { it.name }.toString()
-    }
-
-
 }
 
 

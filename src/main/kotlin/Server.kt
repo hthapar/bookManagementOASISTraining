@@ -9,19 +9,24 @@ import org.http4k.routing.routes
 
 
 val server = routes(
-    "book" bind GET to { req: Request ->
+    "/book" bind GET to { req: Request ->
         Response(OK)
             .body("${getBookNameUsingBookId(req.query("bookId")?.toInt())}")
     },
-    "pen" bind GET to { req: Request ->
-        req.extractId("penId")?.let { id ->
-            getPenDetails(id)?.let { Response(OK).body(it) } ?: Response(Status.NOT_FOUND)
-        } ?: Response(Status.BAD_REQUEST).body("ERROR : Please Enter a valid ID!")
+    "/pen" bind routes(
+        "/detail/" bind GET to { req: Request ->
+            req.extractId("penId")?.let { id ->
+                getPenDetails(id)?.let { Response(OK).body(it) } ?: Response(Status.NOT_FOUND)
+            } ?: Response(Status.BAD_REQUEST).body("ERROR : Please Enter a valid ID!")
+        },
+        "/filter/" bind GET to { req: Request ->
+            Response(OK).body(getPenNameByColor(req.query("inkColor")))
+        }
+    ),
 
-    },
-    "pens" bind GET to { _: Request -> Response(OK)
-        .body( getAllPenNames().toString() )
-
+    "/pens" bind GET to {
+        Response(OK)
+            .body(getAllPenNames().toString())
     }
 )
 
@@ -33,4 +38,6 @@ private fun Request.extractId(name: String) = query(name)?.toIntOrNull()
 
 private fun getAllPenNames(): List<String> = pens.values.map { it.name }
 
+private fun getPenNameByColor(color: String?): String =
+    pens.values.map { it }.filter { it.color == color }.map { it.name }.toString()
 
