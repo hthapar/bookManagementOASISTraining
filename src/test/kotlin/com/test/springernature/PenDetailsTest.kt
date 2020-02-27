@@ -61,7 +61,9 @@ class PenDetailsTest {
     @Test
     fun `Should fetch name of all available pens`(){
 
-        val expected = "List Of pens"
+        val expected = pens.values.map { it.name }
+
+        println(expected)
 
         val actual = null
 
