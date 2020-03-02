@@ -2,6 +2,7 @@ package com.test.springernature
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
+import db.pens
 import org.http4k.core.*
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.NOT_FOUND
@@ -86,7 +87,7 @@ class PenDetailsTest {
 
         val actual = server(request)
 
-        assertThat("Should give pen names by ink color",actual.bodyString(), equalTo(expected))
+        assertThat("Should give pen names by ink color", actual.bodyString(), equalTo(expected))
     }
 
     @Test
@@ -101,20 +102,29 @@ class PenDetailsTest {
 
         val actual = server(request)
 
-        assertThat("Should give pen names by Brand",actual.bodyString(), equalTo(expected))
+        assertThat("Should give pen names by Brand", actual.bodyString(), equalTo(expected))
     }
 
     @Test
     fun `Should fetch availiable quantity by pen name`() {
 
-        val expectedQty = "403"
+        val expectedQty =
+            pensTestData.filter { entry -> entry.value.name == "Parker Pen" }.map { it.value.availability }.toString()
 
         val request = Request(Method.GET, "/pen/qty").query("qty", "Parker Pen")
 
-        val actualQty = server(request)
+        val app = { req: Request ->
+            Response(OK).body(getQtyByPenName(req.query("qty")))
+        }
+
+        val actualQty = app(request)
 
         assertThat(actualQty.bodyString(), equalTo(expectedQty))
 
+    }
+
+    private fun getQtyByPenName(penName: String?): String {
+        return pens.filter { entry -> entry.value.name == penName }.map { it.value.availability }.toString()
     }
 }
 
