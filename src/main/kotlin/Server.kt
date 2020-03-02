@@ -9,10 +9,12 @@ import org.http4k.routing.routes
 
 
 val server = routes(
+
     "/book" bind GET to { req: Request ->
         Response(OK)
             .body("${getBookNameUsingBookId(req.query("bookId")?.toInt())}")
     },
+
     "/pen" bind routes(
         "/detail/" bind GET to { req: Request ->
             req.extractId("penId")?.let { id ->
@@ -22,7 +24,7 @@ val server = routes(
         "/filter-by-color/" bind GET to { req: Request ->
             Response(OK).body(getPenNameByColor(req.query("inkColor")))
         },
-        "filter-by-brand" bind GET to { req: Request ->
+        "/filter-by-brand/" bind GET to { req: Request ->
             Response(OK).body(getPenNameByBrand(req.query("brand")))
         }
     ),
@@ -35,14 +37,29 @@ val server = routes(
 
 private fun getBookNameUsingBookId(bookId: Int?) = books[bookId]
 
+
 private fun getPenDetails(penId: Int) = pens[penId]?.name
+
 
 private fun Request.extractId(name: String) = query(name)?.toIntOrNull()
 
+
 private fun getAllPenNames(): List<String> = pens.values.map { it.name }
 
-private fun getPenNameByColor(color: String?): String =
-    pens.values.map { it }.filter { it.color == color }.map { it.name }.toString()
 
-private fun getPenNameByBrand(brandName: String?): String =
-    pens.values.map { it }.filter { it.brand == brandName }.map { it.name }.toString()
+private fun getPenNameByBrand(brandName: String?): String {
+
+    val brandList = pens.filter { entry -> entry.value.brand == brandName }
+                                    .map { entry -> entry.value.name }
+
+    return convertMapValuesToString(brandList)
+
+}
+
+
+private fun getPenNameByColor(colorRequested: String?) =
+    pens.filter { entry -> entry.value.color == colorRequested }
+        .map { entry -> entry.value.name }.toString()
+
+
+private fun convertMapValuesToString(list: List<String>) = list.toString()

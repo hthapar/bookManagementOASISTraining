@@ -9,7 +9,6 @@ import org.http4k.core.Status.Companion.OK
 
 import org.junit.jupiter.api.Test
 import server
-import kotlin.math.exp
 
 class PenDetailsTest {
 
@@ -104,8 +103,6 @@ class PenDetailsTest {
 
         assertThat(actual.bodyString(), equalTo(expected))
     }
-
-
 }
 
 

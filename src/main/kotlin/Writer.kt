@@ -11,8 +11,6 @@ abstract class AbstractWriter(override val name: String, override val brand: Str
     override fun decorator(): String = "Write using $name from $brand of $color color. \n********************\n{text}\n********************\n"
 
     override fun write(text: String): String = decorator().replace("{text}", text)
-
-    fun print(text: String) = println(write(text))
 }
 
 class Pencil(name: String, brand : String, color: String) : AbstractWriter(name,brand,color)
