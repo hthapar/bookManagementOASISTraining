@@ -4,8 +4,6 @@ interface Writer {
     val color: String
     val availability: Int
     val price: Double
-    fun decorator(): String
-    fun write(text: String): String
 }
 
 abstract class AbstractWriter(
@@ -14,13 +12,7 @@ abstract class AbstractWriter(
     override val color: String,
     override val availability: Int,
     override val price: Double
-) : Writer {
-
-    override fun decorator(): String =
-        "Write using $name from $brand of $color color. \n********************\n{text}\n********************\n"
-
-    override fun write(text: String): String = decorator().replace("{text}", text)
-}
+) : Writer
 
 class Pencil(
     name: String,
