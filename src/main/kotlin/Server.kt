@@ -10,7 +10,7 @@ import org.http4k.routing.routes
 
 val server = routes(
 
-    "/book" bind GET to { req: Request ->
+    "/book/" bind GET to { req: Request ->
         Response(OK)
             .body("${getBookNameUsingBookId(req.query("bookId")?.toInt())}")
     },
@@ -26,14 +26,21 @@ val server = routes(
         },
         "/filter-by-brand/" bind GET to { req: Request ->
             Response(OK).body(getPenNameByBrand(req.query("brand")))
+        },
+        "/qty/" bind GET to { req: Request ->
+            Response(OK).body(getQtyByPenName(req.query("qty")))
+        },
+        "/price/" bind GET to { req: Request ->
+            Response(OK).body(getPriceByPenName(req.query("price")))
         }
     ),
 
-    "/pens" bind GET to {
+    "/pens/" bind GET to {
         Response(OK)
             .body(getAllPenNames().toString())
     }
 )
+
 
 private fun getBookNameUsingBookId(bookId: Int?) = books[bookId]
 
@@ -47,19 +54,22 @@ private fun Request.extractId(name: String) = query(name)?.toIntOrNull()
 private fun getAllPenNames(): List<String> = pens.values.map { it.name }
 
 
-private fun getPenNameByBrand(brandName: String?): String {
+private fun getPenNameByBrand(brandName: String?) =
 
-    val brandList = pens.filter { entry -> entry.value.brand == brandName }
-                                    .map { entry -> entry.value.name }
-
-    return convertMapValuesToString(brandList)
-
-}
+    convertListToString( pens.filter { entry -> entry.value.brand == brandName }
+        .map { entry -> entry.value.name } )
 
 
 private fun getPenNameByColor(colorRequested: String?) =
-    pens.filter { entry -> entry.value.color == colorRequested }
-        .map { entry -> entry.value.name }.toString()
+    convertListToString( pens.filter { entry -> entry.value.color == colorRequested }
+        .map { entry -> entry.value.name } )
+
+private fun getQtyByPenName(penName: String?) =
+    convertListToString( pens.filter { entry -> entry.value.name == penName }.map { it.value.availability } )
 
 
-private fun convertMapValuesToString(list: List<String>) = list.toString()
+private fun getPriceByPenName(penName: String?) =
+    convertListToString( pens.filter { entry -> entry.value.name == penName }.map { it.value.price } )
+
+
+private fun convertListToString(list: List<Any>) = list.toString()

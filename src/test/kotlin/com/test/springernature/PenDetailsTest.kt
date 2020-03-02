@@ -113,19 +113,12 @@ class PenDetailsTest {
 
         val request = Request(Method.GET, "/pen/qty").query("qty", "Parker Pen")
 
-        val app = { req: Request ->
-            Response(OK).body(getQtyByPenName(req.query("qty")))
-        }
-
-        val actualQty = app(request)
+        val actualQty = server(request)
 
         assertThat(actualQty.bodyString(), equalTo(expectedQty))
 
     }
 
-    private fun getQtyByPenName(penName: String?): String {
-        return pens.filter { entry -> entry.value.name == penName }.map { it.value.availability }.toString()
-    }
 
     @Test
     fun `Should fetch price by pen name`() {
@@ -133,20 +126,13 @@ class PenDetailsTest {
         val expectedQty =
             pensTestData.filter { entry -> entry.value.name == "Parker Pen" }.map { it.value.price }.toString()
 
-        val request = Request(Method.GET, "/pen/qty").query("price", "Parker Pen")
+        val request = Request(Method.GET, "/pen/price").query("price", "Parker Pen")
 
-        val app = { req: Request ->
-            Response(OK).body(getPriceByPenName(req.query("price")))
-        }
-
-        val actualQty = app(request)
+        val actualQty = server(request)
 
         assertThat(actualQty.bodyString(), equalTo(expectedQty))
 
     }
-
-    private fun getPriceByPenName(penName: String?) =
-         pens.filter { entry -> entry.value.name == penName }.map { it.value.price }.toString()
 
 }
 
