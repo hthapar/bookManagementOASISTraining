@@ -2,7 +2,6 @@ package com.test.springernature
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import db.pens
 import org.http4k.core.*
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.NOT_FOUND
@@ -142,31 +141,14 @@ class PenDetailsTest {
                 .query("penId", "3")
                 .query("qty", "30")
 
-        val app = { req: Request ->
-            Response(OK).body(
-                getTotal(
-                    req.query("penId"),
-                    req.query("qty")
-                ).toString()
-            )
-        }
 
         val expected = 1200.0.toString()
 
-        val actual = app(request)
+        val actual = server(request)
 
         assertThat(actual.bodyString() , equalTo(expected))
 
     }
-
-
-    private fun getTotal(penId: String?, quantity: String?): Double? {
-
-        return penId?.let { getPriceByPenId(penId)?.times(quantity!!.toDouble()) }
-
-    }
-
-    private fun getPriceByPenId(penId: String) = pens[penId.toInt()]?.price
 }
 
 

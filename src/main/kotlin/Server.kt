@@ -32,6 +32,10 @@ val server = routes(
         },
         "/price/" bind GET to { req: Request ->
             Response(OK).body(getPriceByPenName(req.query("price")))
+        },
+        "/cart-total/" bind GET to { req: Request ->
+            Response(OK).body( getTotal( req.query("penId"), req.query("qty")).toString()
+            )
         }
     ),
 
@@ -70,6 +74,15 @@ private fun getQtyByPenName(penName: String?) =
 
 private fun getPriceByPenName(penName: String?) =
     convertListToString( pens.filter { entry -> entry.value.name == penName }.map { it.value.price } )
+
+
+private fun getTotal(penId: String?, quantity: String?): Double? {
+
+    return penId?.let { getPriceByPenId(penId)?.times(quantity!!.toDouble()) }
+}
+
+
+private fun getPriceByPenId(penId: String) = pens[penId.toInt()]?.price
 
 
 private fun convertListToString(list: List<Any>) = list.toString()
