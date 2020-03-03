@@ -134,7 +134,42 @@ class PenDetailsTest {
 
     }
 
+    @Test
+    fun `Should check total price of requested pen with quantity`() {
+
+        val request =
+            Request(Method.GET, "/pen/cart-total")
+                .query("penId", "3")
+                .query("qty", "30")
+
+        val app = { req: Request ->
+            Response(OK).body(
+                getTotal(
+                    req.query("penId"),
+                    req.query("qty")
+                ).toString()
+            )
+        }
+
+        val expected = 1200.0.toString()
+
+        val actual = app(request)
+
+        assertThat(actual.bodyString() , equalTo(expected))
+
+    }
+
+
+    private fun getTotal(penId: String?, quantity: String?): Double? {
+
+        return penId?.let { getPriceByPenId(penId)?.times(quantity!!.toDouble()) }
+
+    }
+
+    private fun getPriceByPenId(penId: String) = pens[penId.toInt()]?.price
 }
+
+
 
 
 
