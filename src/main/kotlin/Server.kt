@@ -27,11 +27,8 @@ val server = routes(
         "/filter-by-brand/" bind GET to { req: Request ->
             Response(OK).body(getPenNameByBrand(req.query("brand")))
         },
-        "/qty/" bind GET to { req: Request ->
-            Response(OK).body(getQtyByPenName(req.query("qty")))
-        },
         "/price/" bind GET to { req: Request ->
-            Response(OK).body(getPriceByPenName(req.query("price")))
+            Response(OK).body(getPriceByPenName(req.query("penName")))
         },
         "/cart-total/" bind GET to { req: Request ->
             Response(OK).body( getTotal( req.query("penId"), req.query("qty")).toString()
@@ -67,9 +64,6 @@ private fun getPenNameByBrand(brandName: String?) =
 private fun getPenNameByColor(colorRequested: String?) =
     convertListToString( pens.filter { entry -> entry.value.color == colorRequested }
         .map { entry -> entry.value.name } )
-
-private fun getQtyByPenName(penName: String?) =
-    convertListToString( pens.filter { entry -> entry.value.name == penName }.map { it.value.availability } )
 
 
 private fun getPriceByPenName(penName: String?) =

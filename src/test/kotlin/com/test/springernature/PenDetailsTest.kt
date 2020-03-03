@@ -104,20 +104,6 @@ class PenDetailsTest {
         assertThat("Should give pen names by Brand", actual.bodyString(), equalTo(expected))
     }
 
-    @Test
-    fun `Should fetch availiable quantity by pen name`() {
-
-        val expectedQty =
-            pensTestData.filter { entry -> entry.value.name == "Parker Pen" }.map { it.value.availability }.toString()
-
-        val request = Request(Method.GET, "/pen/qty").query("qty", "Parker Pen")
-
-        val actualQty = server(request)
-
-        assertThat(actualQty.bodyString(), equalTo(expectedQty))
-
-    }
-
 
     @Test
     fun `Should fetch price by pen name`() {
@@ -125,7 +111,7 @@ class PenDetailsTest {
         val expectedQty =
             pensTestData.filter { entry -> entry.value.name == "Parker Pen" }.map { it.value.price }.toString()
 
-        val request = Request(Method.GET, "/pen/price").query("price", "Parker Pen")
+        val request = Request(Method.GET, "/pen/price").query("penName", "Parker Pen")
 
         val actualQty = server(request)
 
