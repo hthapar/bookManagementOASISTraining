@@ -1,8 +1,10 @@
 package com.test.springernature
 
+import Pen
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.http4k.core.*
+import org.http4k.core.Method.*
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.NOT_FOUND
 import org.http4k.core.Status.Companion.OK
@@ -11,11 +13,12 @@ import org.junit.jupiter.api.Test
 import server
 
 class PenDetailsTest {
+    val server = server()
 
     @Test
     fun `Should fetch pen name using Id`() {
 
-        val request = Request(Method.GET, "/pen/detail").query("penId", "4")
+        val request = Request(GET, "/pen/detail").query("penId", "4")
 
         val expectedResponse = "Cello Pen"
 
@@ -31,7 +34,7 @@ class PenDetailsTest {
 
         val expected = ""
 
-        val request = Request(Method.GET, "/pen/detail").query("penId", "100")
+        val request = Request(GET, "/pen/detail").query("penId", "100")
 
 
         val actual = server(request)
@@ -47,7 +50,7 @@ class PenDetailsTest {
 
         val expected = "ERROR : Please Enter a valid ID!"
 
-        val request = Request(Method.GET, "/pen/detail").query("penId", "abc")
+        val request = Request(GET, "/pen/detail").query("penId", "abc")
 
 
         val actual = server(request)
@@ -63,7 +66,7 @@ class PenDetailsTest {
         val expected = pensTestData.values.map { it.name }.toString()
 
 
-        val request = Request(Method.GET, "/pens")
+        val request = Request(GET, "/pens")
 
 
         val actual = server(request)
@@ -82,7 +85,7 @@ class PenDetailsTest {
             .filter { it.color == "black" }
             .map { it.name }.toString()
 
-        val request = Request(Method.GET, "/pen/filter-by-color").query("inkColor", "black")
+        val request = Request(GET, "/pen/filter-by-color").query("inkColor", "black")
 
         val actual = server(request)
 
@@ -97,7 +100,7 @@ class PenDetailsTest {
             .filter { it.brand == "Camlin" }
             .map { it.name }.toString()
 
-        val request = Request(Method.GET, "/pen/filter-by-brand").query("brand", "Camlin")
+        val request = Request(GET, "/pen/filter-by-brand").query("brand", "Camlin")
 
         val actual = server(request)
 
@@ -111,7 +114,7 @@ class PenDetailsTest {
         val expectedQty =
             pensTestData.filter { entry -> entry.value.name == "Parker Pen" }.map { it.value.price }.toString()
 
-        val request = Request(Method.GET, "/pen/price").query("penName", "Parker Pen")
+        val request = Request(GET, "/pen/price").query("penName", "Parker Pen")
 
         val actualQty = server(request)
 
@@ -123,7 +126,7 @@ class PenDetailsTest {
     fun `Should check total price of requested pen with quantity`() {
 
         val request =
-            Request(Method.GET, "/pen/cart-total")
+            Request(GET, "/pen/cart-total")
                 .query("penId", "3")
                 .query("qty", "30")
 
@@ -132,7 +135,7 @@ class PenDetailsTest {
 
         val actual = server(request)
 
-        assertThat(actual.bodyString() , equalTo(expected))
+        assertThat(actual.bodyString(), equalTo(expected))
 
     }
 }

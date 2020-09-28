@@ -1,4 +1,4 @@
-import db.books
+import db.booksJson
 import db.pens
 
 import org.http4k.core.*
@@ -8,11 +8,15 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 
 
-val server = routes(
+fun server() = routes(
 
-    "/book/" bind GET to { req: Request ->
+    "/book" bind GET to { req: Request ->
         Response(OK)
-            .body("${getBookNameUsingBookId(req.query("bookId")?.toInt())}")
+            .body("${req.query("bookId")?.let { getBookNameUsingBookId(it) }}")
+    },
+
+    "/books" bind GET to {
+       Response(OK).body(getAllBooks().toPrettyString())
     },
 
     "/pen" bind routes(
@@ -42,10 +46,12 @@ val server = routes(
     }
 )
 
+//books
+private fun getBookNameUsingBookId(bookId: String) = booksJson.get(bookId)
 
-private fun getBookNameUsingBookId(bookId: Int?) = books[bookId]
+fun getAllBooks() = booksJson
 
-
+//pens
 private fun getPenDetails(penId: Int) = pens[penId]?.name
 
 
