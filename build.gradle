@@ -18,6 +18,8 @@ dependencies {
     implementation group: "org.http4k", name: "http4k-format-jackson", version: "3.260.0"
     implementation group: "org.http4k", name: "http4k-format-gson", version: "3.261.0"
 
+    implementation group: "org.http4k", name: "http4k-template-handlebars", version: "3.261.0"
+
     testCompile group: 'com.natpryce', name: 'hamkrest', version: '1.7.0.0'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2'
