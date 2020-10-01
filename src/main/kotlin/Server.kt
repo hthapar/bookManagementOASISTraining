@@ -6,26 +6,40 @@ import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status
 import org.http4k.core.Status.Companion.BAD_REQUEST
+import org.http4k.core.Status.Companion.NOT_FOUND
 import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.bind
 import org.http4k.routing.path
 import org.http4k.routing.routes
+import java.nio.channels.AsynchronousFileChannel.open
 
 fun server() = routes(
 
+    //query method se id extract
     "/book" bind GET to { req: Request ->
         Response(OK)
             .body("${req.query("bookId")?.let { getBookNameUsingBookId(it) }}")
     },
 
-    "/book/{id}" bind PUT to { req: Request ->
+    //path params se id extract
+    "/book" bind routes(
 
-        val bookId: String? = req.path("id").toString()
-        val newBookName : String? = req.bodyString()
+        "/getBook/{id}" bind GET to { req: Request ->
 
-        updateValue(bookId, newBookName)?.let { Response(OK).body(it) }
-            ?: Response(BAD_REQUEST).body("ERROR : Please Enter a valid ID!")
-    },
+            val bookId: String? = req.path("id").toString()
+
+            bookId?.let { getBookNameUsingBookId(it) }?.let { Response(OK).body(it) }
+                ?: Response(NOT_FOUND).body("ERROR : Please Enter a valid ID!")
+
+        },
+        "/update/{id}" bind PUT to { req: Request ->
+
+            val bookId: String? = req.path("id").toString()
+            val newBookName: String? = req.bodyString()
+
+            updateValue(bookId, newBookName)?.let { Response(OK).body(it) }
+                ?: Response(NOT_FOUND).body("ERROR : Please Enter a valid ID!")
+        }),
 
     "/books" bind GET to {
         Response(OK).body(getAllBooks().toPrettyString())
@@ -34,7 +48,7 @@ fun server() = routes(
     "/pen" bind routes(
         "/detail/" bind GET to { req: Request ->
             req.extractId("penId")?.let { id ->
-                getPenDetails(id)?.let { Response(OK).body(it) } ?: Response(Status.NOT_FOUND)
+                getPenDetails(id)?.let { Response(OK).body(it) } ?: Response(NOT_FOUND)
             } ?: Response(BAD_REQUEST).body("ERROR : Please Enter a valid ID!")
         },
         "/filter-by-color/" bind GET to { req: Request ->
@@ -64,7 +78,7 @@ fun updateValue(pathId: String?, newBookName: String?): String? {
 }
 
 //books
-private fun getBookNameUsingBookId(bookId: String) = booksJson.get(bookId)
+private fun getBookNameUsingBookId(bookId: String) = booksJson.get(bookId).toPrettyString()
 
 fun getAllBooks() = booksJson
 

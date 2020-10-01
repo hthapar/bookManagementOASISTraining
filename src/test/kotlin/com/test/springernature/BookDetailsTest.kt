@@ -38,10 +38,10 @@ class BookDetailsTest {
     }
 
     @Test
-    fun `Should return book name using path param book id`() {
-        val request = Request(GET, "/book/1")
+    fun `Should fetch book name using book id from route param`() {
+        val request = Request(GET, "/book/getBook/1")
 
-        val expected = "\"Immortals of Meluha\" is updated to new data"
+        val expected = "\"Immortals of Meluha\""
 
         val actual =  server(request)
 
@@ -51,9 +51,9 @@ class BookDetailsTest {
 
     @Test
     fun `Should UPDATE book name using path param book id`() {
-        val request = Request(PUT, "/book/1").body("New Book Name")
+        val request = Request(PUT, "/book/update/1").body("New Book Name")
 
-        val expected = "\"Immortals of Meluha\" is updated to \"New Book Name\""
+        val expected = "\"Immortals of Meluha\" will be updated to \"New Book Name\""
 
         val actual =  server(request)
 
