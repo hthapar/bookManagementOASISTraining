@@ -1,6 +1,5 @@
 package com.test.springernature
 
-import Pen
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.http4k.core.*
@@ -10,10 +9,10 @@ import org.http4k.core.Status.Companion.NOT_FOUND
 import org.http4k.core.Status.Companion.OK
 
 import org.junit.jupiter.api.Test
-import server
+import app
 
 class PenDetailsTest {
-    val server = server()
+    val server = app()
 
     @Test
     fun `Should fetch pen name using Id`() {
@@ -85,7 +84,7 @@ class PenDetailsTest {
             .filter { it.color == "black" }
             .map { it.name }.toString()
 
-        val request = Request(GET, "/pen/filter-by-color").query("inkColor", "black")
+        val request = Request(GET, "/pen/filter").query("inkColor", "black")
 
         val actual = server(request)
 
@@ -100,7 +99,7 @@ class PenDetailsTest {
             .filter { it.brand == "Camlin" }
             .map { it.name }.toString()
 
-        val request = Request(GET, "/pen/filter-by-brand").query("brand", "Camlin")
+        val request = Request(GET, "/pen/filter").query("brand", "Camlin")
 
         val actual = server(request)
 
