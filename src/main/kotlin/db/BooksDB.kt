@@ -1,12 +1,7 @@
 package db
 
 import BookDetails
-import okhttp3.Response
-import org.http4k.core.Status
-import org.http4k.core.Status.Companion.NOT_ACCEPTABLE
 import org.http4k.core.Status.Companion.NOT_FOUND
-import org.http4k.core.Status.Companion.OK
-import org.http4k.filter.CachingFilters
 
 class BooksDB {
     private val booksDB = hashMapOf<Int?, BookDetails>(
@@ -20,10 +15,10 @@ class BooksDB {
     fun getAllBooks() = booksDB
 
     fun getBookNameUsingBookId(bookId : Int?): String? {
-        return if (checkExistence(bookId)) booksDB.getValue(bookId).name else NOT_FOUND.toString()
+        return if (checkBookIdExistence(bookId)) booksDB.getValue(bookId).name else NOT_FOUND.toString()
     }
 
-    fun updateValue(bookId: Int?, newBookDetails: BookDetails): Boolean = if (checkExistence(bookId)){
+    fun updateValue(bookId: Int?, newBookDetails: BookDetails): Boolean = if (checkBookIdExistence(bookId)){
             booksDB[bookId] = BookDetails( newBookDetails.name,newBookDetails.id )
             true
         }else
@@ -31,7 +26,7 @@ class BooksDB {
 
     fun addBook(bookId: Int, bookName: String): String {
 
-        if (checkExistence(bookId)){
+        if (checkBookIdExistence(bookId)){
             return "Book id Already Exist!!"
         }
         else
@@ -39,10 +34,11 @@ class BooksDB {
             return "Book added"
     }
 
-    fun delete(id: Int) {
+    fun delete(id: Int): HashMap<Int?, BookDetails> {
         booksDB.remove(id)
+        return booksDB
     }
 
-    private fun checkExistence(bookId : Int?) = booksDB.contains(bookId)
+    private fun checkBookIdExistence(bookId : Int?) = booksDB.contains(bookId)
 
 }

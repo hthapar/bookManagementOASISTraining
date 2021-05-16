@@ -80,12 +80,12 @@ class BookDetailsTest {
     fun `Should UPDATE book name using book id`() {
         val request = Request(PATCH, "/book/update/1").body(BookDetails("Test-Book",1).name.toString())
 
-        val expected = "BookDetails(name=Test-Book, id=1)"
+        val expected = "true"
 
         val actual =  server(request)
 
         assertThat("status should be 200 OK success", actual.status, equalTo(Status.OK))
-        assertThat(actual.bodyString(), equalTo(expected))
+        assertThat(actual.body.toString(), equalTo(expected))
 
     }
 
