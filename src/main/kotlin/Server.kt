@@ -15,6 +15,7 @@ val dao = BooksDB()
 fun app() = routes(
 
 //query method se id extract
+    "/" bind GET to {Response(OK).body("Hello!")},
 
     "/books" bind GET to {
         Response(OK).body(dao.getAllBooks().toString())
@@ -54,7 +55,6 @@ fun app() = routes(
             Response(OK).body("${getId(req)?.let { dao.addBook(it, req.bodyString())}}")
         }
 
-
     ),
 
     "/pen" bind routes(
@@ -69,11 +69,11 @@ fun app() = routes(
             when (val queryName = req.uri.query.substringBefore("=")) {
 
                 "inkColor" -> req.query(queryName)?.let { inkColor: String ->
-                    getPenNameByColor(inkColor)?.let { Response(OK).body(it) } ?: Response(NOT_FOUND)
+                    getPenNameByColor(inkColor).let { Response(OK).body(it) } ?: Response(NOT_FOUND)
                 } ?: Response(BAD_REQUEST).body("ERROR : Please Enter a valid color!")
 
                 "brand" -> req.query(queryName)?.let { brand: String ->
-                    getPenNameByBrand(brand)?.let { Response(OK).body(it) } ?: Response(NOT_FOUND)
+                    getPenNameByBrand(brand).let { Response(OK).body(it) } ?: Response(NOT_FOUND)
                 } ?: Response(BAD_REQUEST).body("ERROR : Please Enter a valid brand name!")
 
                 else -> Response(NOT_FOUND).body("ERROR : URL NOT FOUND!")

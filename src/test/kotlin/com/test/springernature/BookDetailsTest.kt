@@ -105,11 +105,12 @@ class BookDetailsTest {
     fun `Should DELETE book name using book id`() {
         val request = Request(DELETE, "/book/delete/1")
 
-        val expected = Status.OK
+        val expected = "Book Deleted"
 
         val actual =  server(request)
 
-        assertThat(actual.status, equalTo(expected))
+        assertThat(actual.status, equalTo(Status.OK))
+        assertThat(actual.body.toString(), equalTo(expected))
 
     }
 
