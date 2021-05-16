@@ -64,14 +64,40 @@ class BookDetailsTest {
     }
 
     @Test
-    fun `Should UPDATE book name using book id`() {
-        val request = Request(PATCH, "/book/update/1").body(BookDetails("Test-Book",1).name)
+    fun `Should NOT fetch book name if book id is not valid from route param`() {
+        val request = Request(GET, "/book/id/123")
 
-        val expected = "BookName(name=Test-Book, id=1)"
+        val expected = "404 Not Found"
 
         val actual =  server(request)
 
+        assertThat("Status should be 404 Not Found", actual.body.toString(), equalTo(Status.NOT_FOUND.toString()))
+        assertThat("if not found, should not return name", actual.bodyString(), equalTo(expected))
+
+    }
+
+    @Test
+    fun `Should UPDATE book name using book id`() {
+        val request = Request(PATCH, "/book/update/1").body(BookDetails("Test-Book",1).name.toString())
+
+        val expected = "BookDetails(name=Test-Book, id=1)"
+
+        val actual =  server(request)
+
+        assertThat("status should be 200 OK success", actual.status, equalTo(Status.OK))
         assertThat(actual.bodyString(), equalTo(expected))
+
+    }
+
+    @Test
+    fun `Should NOT UPDATE book name if book id does not exist`() {
+        val request = Request(PATCH, "/book/update/123").body(BookDetails("Test-Book",123).name.toString())
+
+        val expected = false //yet to return correct Response
+
+        val actual =  server(request)
+
+        assertThat("status should be 404 NOT found", actual.body.toString(), equalTo(expected.toString()))
 
     }
 
@@ -85,5 +111,28 @@ class BookDetailsTest {
 
         assertThat(actual.status, equalTo(expected))
 
+    }
+
+    @Test
+    fun `Should ADD book name using new book id`() {
+        val request = Request(POST, "/book/add/6").body("New Book")
+
+        val expected = "Book added"
+
+        val actual =  server(request)
+
+        assertThat(actual.body.toString(), equalTo(expected))
+
+    }
+
+    @Test
+    fun `Should NOT ADD book name if book id already exist`() {
+        val request = Request(POST, "/book/add/3").body("New Book")
+
+        val expected = "Book id Already Exist!!"
+
+        val actual =  server(request)
+
+        assertThat(actual.body.toString(), equalTo(expected))
     }
 }
